@@ -18,26 +18,17 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
     <application
         android:name=".ApplicationController"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:label="@string/app_name"
         android:persistent="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-      android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".presentation.login.ui.login.LoginActivity"
-            android:label="@string/title_activity_login">
-            <!--android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"-->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-        </activity>
         <!--
         android:debuggable="true"
                 tools:ignore="HardcodedDebugMode"
@@ -55,10 +46,12 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".presentation.main.MainActivity">
-<!--            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"-->
+            android:name=".presentation.main.MainActivity"
+            android:screenOrientation="portrait">
+            <!--            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>

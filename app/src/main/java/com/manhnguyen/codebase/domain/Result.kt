@@ -1,4 +1,4 @@
-package com.manhnguyen.codebase.presentation.login.data.model
+package com.manhnguyen.codebase.domain
 
 /**
  * A generic class that holds a value with its loading status.

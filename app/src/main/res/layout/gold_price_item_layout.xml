@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <androidx.gridlayout.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:orientation="horizontal"
+        app:useDefaultMargins="true">
+
+        <TextView
+            android:id="@+id/dateTextView"
+            android:layout_width="0dp"
+            android:paddingTop="@dimen/dm_10"
+            android:paddingBottom="@dimen/dm_10"
+            android:layout_marginLeft="@dimen/dm_20"
+            android:gravity="start"
+            android:text="16 July 2021"
+            android:textColor="@color/chart_main_color"
+            app:layout_column="0"
+            app:layout_columnWeight="1"
+            app:layout_rowSpan="2" />
+
+        <TextView
+            android:id="@+id/amountTextView"
+            android:layout_width="0dp"
+            android:layout_marginRight="@dimen/dm_20"
+            android:paddingTop="@dimen/dm_10"
+            android:paddingBottom="@dimen/dm_10"
+            android:gravity="end"
+            android:text="$ 100"
+            android:textColor="@color/chart_main_color"
+            android:textStyle="bold"
+            app:layout_column="1"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            app:layout_row="0" />
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginLeft="@dimen/dm_20"
+        android:background="@color/chart_blue_blur_background" />
+
+</LinearLayout>

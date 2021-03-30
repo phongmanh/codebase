@@ -28,7 +28,7 @@ class ApplicationController : MultiDexApplication(), LifecycleObserver {
                 listOf(
                     ServiceModule.serviceModule,
                     AppModule.appModule,
-                    APIServiceModule.apiModule,
+                    apiModule,
                     DatabaseModule.databaseModule,
                     ViewModelModules.modules,
                     RepositoryModules.modules,

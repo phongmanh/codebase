@@ -2,11 +2,11 @@ package com.manhnguyen.codebase.data.room.databases
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.manhnguyen.codebase.domain.model.UserModel
+import com.manhnguyen.codebase.domain.model.GoldPriceModel
 
 
 @Database(
-    entities = [UserModel::class],
+    entities = [GoldPriceModel::class],
     version = 1,
     exportSchema = false
 )

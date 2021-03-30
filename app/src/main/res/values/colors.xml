@@ -43,4 +43,10 @@
     <color name="blue_dark_color">#46a5d2</color>
     <color name="backgroundGrey2">#eeeeee</color>
 
+    <color name="chart_main_color">#0F85D1</color>
+    <color name="chart_white_blur_background">#DCF2FF</color>
+    <color name="chart_blue_blur_background">#9DCDEC</color>
+    <color name="chart_white_background">#FFFFFF</color>
+
+
 </resources>

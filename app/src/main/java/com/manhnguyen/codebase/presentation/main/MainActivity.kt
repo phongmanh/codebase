@@ -6,9 +6,9 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.manhnguyen.codebase.ApplicationController
 import com.manhnguyen.codebase.R
 import com.manhnguyen.codebase.base.ActivityBase
+import com.manhnguyen.codebase.presentation.fragments.GoldPriceFragment
 import org.koin.android.ext.android.inject
 
 
@@ -31,12 +31,11 @@ class MainActivity : ActivityBase() {
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
 
+
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             ActivityLifecycle(mainViewModel, this)
         )
-
-        initToolbarTile()
-        navAction()
+        replaceFragment(GoldPriceFragment(), GoldPriceFragment::javaClass.name)
     }
 
 

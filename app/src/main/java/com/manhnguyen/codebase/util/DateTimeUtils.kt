@@ -292,6 +292,16 @@ class DateTimeUtils {
             return ""
         }
 
+        fun getDateMonthName(date: String): String {
+            try {
+                val simpleDateFormat1 = SimpleDateFormat(SHORT_DATE_FORMAT, Locale.getDefault())
+                val simpleDateFormat2 = SimpleDateFormat(SHORT_DATE_NAME,Locale.getDefault())
+                val time = simpleDateFormat1.parse(date)
+                return simpleDateFormat2.format(time)
+            } catch (e: Exception) {
 
+            }
+            return ""
+        }
     }
 }
