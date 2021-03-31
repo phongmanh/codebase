@@ -135,5 +135,8 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="no_data_title">Data is empty</string>
+    <string name="no_data_title">No chart data available</string>
+    <string name="chart_title">RTH Gold Price</string>
+    <string name="refresh_label">Refresh</string>
+    <string name="close_label">Close</string>
 </resources>

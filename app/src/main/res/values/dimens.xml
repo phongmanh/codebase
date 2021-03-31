@@ -34,4 +34,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="fragment_horizontal_margin">16dp</dimen>
     <dimen name="fragment_vertical_margin">16dp</dimen>
+    <dimen name="chart_day_text_size">55sp</dimen>
+    <dimen name="chart_medium_text_size">20sp</dimen>
+    <dimen name="chart_toolbar_title">25sp</dimen>
+    <dimen name="image_size">96dp</dimen>
 </resources>

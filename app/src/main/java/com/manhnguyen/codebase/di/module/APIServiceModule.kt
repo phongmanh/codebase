@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
 import javax.net.ssl.*
 
 val apiModule = module {
@@ -75,6 +76,7 @@ private val headersInjectedHTTPClient: OkHttpClient
         }
         builder = injectUnsafeBuilder(builder)
         builder.interceptors().add(Interceptor { chain -> onOnIntercept(chain) })
+        builder.connectTimeout(15, TimeUnit.SECONDS)
         return builder.build()
     }
 
@@ -82,7 +84,6 @@ private val headersInjectedHTTPClient: OkHttpClient
 private fun onOnIntercept(chain: Interceptor.Chain): Response {
     val request = chain.request().newBuilder().header("X-App-Token", getToken()).build()
     try {
-        Log.e("onOnIntercept", request.header("X-App-Token"))
         return chain.proceed(request)
     } catch (exception: SocketTimeoutException) {
         exception.printStackTrace()

@@ -5,6 +5,7 @@ import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DateTimeUtils {
 
@@ -295,13 +296,22 @@ class DateTimeUtils {
         fun getDateMonthName(date: String): String {
             try {
                 val simpleDateFormat1 = SimpleDateFormat(SHORT_DATE_FORMAT, Locale.getDefault())
-                val simpleDateFormat2 = SimpleDateFormat(SHORT_DATE_NAME,Locale.getDefault())
+                val simpleDateFormat2 = SimpleDateFormat(SHORT_DATE_NAME, Locale.getDefault())
                 val time = simpleDateFormat1.parse(date)
                 return simpleDateFormat2.format(time)
             } catch (e: Exception) {
 
             }
             return ""
+        }
+
+        fun getCurrentDate(): ArrayList<String> {
+            val date = LocalDate.now()
+            return arrayListOf(
+                date.dayOfMonth.toString(),
+                date.dayOfWeek.name.toLowerCase().capitalize(),
+                "${date.month.name.toLowerCase().capitalize()} ${date.year}"
+            )
         }
     }
 }

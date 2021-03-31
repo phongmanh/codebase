@@ -40,9 +40,15 @@ abstract class ActivityBase : AppCompatActivity() {
         }
     }
 
-    protected fun replaceFragment( fragment: Fragment, newTag: String) {
+    protected fun replaceFragment(fragment: Fragment, newTag: String) {
         try {
             val ft = supportFragmentManager.beginTransaction()
+            ft.setCustomAnimations(
+                R.anim.enter_from_left,
+                R.anim.enter_from_right,
+                R.anim.exit_from_left,
+                R.anim.exit_from_right
+            )
             ft.replace(R.id.mainContainer, fragment, newTag).commit()
             currentChildFragmentTag = null
 

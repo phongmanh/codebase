@@ -35,6 +35,7 @@ class MainActivity : ActivityBase() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             ActivityLifecycle(mainViewModel, this)
         )
+
         replaceFragment(GoldPriceFragment(), GoldPriceFragment::javaClass.name)
     }
 
