@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Codebase</string>
+    <string name="app_name">RTH Gold</string>
     <string name="title_activity_login">LoginActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -139,4 +139,5 @@
     <string name="chart_title">RTH Gold Price</string>
     <string name="refresh_label">Refresh</string>
     <string name="close_label">Close</string>
+    <string name="no_internet_inform">Oop! Something wrong, please check your internet and refresh</string>
 </resources>

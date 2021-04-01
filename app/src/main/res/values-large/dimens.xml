@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recycle_padding_top">50dp</dimen>
+    <dimen name="refresh_margin_top">15dp</dimen>
+    <dimen name="chart_normal_text_size">18sp</dimen>
+</resources>

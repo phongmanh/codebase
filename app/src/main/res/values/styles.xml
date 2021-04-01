@@ -3,7 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/googleBlueColor</item>
+        <item name="colorPrimary">@color/chart_main_color</item>
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:buttonStyle">@style/ButtonTextStyle</item>
         <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>-->
         <!--       <item name="floatingActionButtonStyle">@style/Widget.App.FloatingActionButton</item>-->
@@ -60,5 +62,6 @@
         <item name="android:paddingBottom">0dp</item>
         .....
     </style>
+
 
 </resources>
