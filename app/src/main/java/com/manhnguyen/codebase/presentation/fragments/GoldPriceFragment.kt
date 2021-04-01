@@ -228,6 +228,7 @@ class GoldPriceFragment : FragmentBase() {
 
     @OnClick(R.id.refreshButton)
     fun onClick() {
+        noDataContainer.visibility = View.GONE
         showProgressBar(progressBar)
         goldPriceViewModel.loadGoldPrice()
     }
