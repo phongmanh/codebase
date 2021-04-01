@@ -100,6 +100,10 @@ class GoldPriceFragment : FragmentBase() {
         toolbar.setNavigationOnClickListener {
             profileDialog!!.show()
         }
+        val profile = goldPriceViewModel.getProfile()
+        dialogView.findViewById<TextView>(R.id.nameTextView).text = profile.name
+        dialogView.findViewById<TextView>(R.id.emailTextView).text = profile.email
+
         dialogView.findViewById<Button>(R.id.closeDialogBtn).setOnClickListener {
             profileDialog!!.dismiss()
         }
@@ -115,7 +119,6 @@ class GoldPriceFragment : FragmentBase() {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = goldPriceAdapter
         }
-        DateTimeUtils.getCurrentDate()
         goldPriceViewModel.getGoldPrice().observe(viewLifecycleOwner, Observer {
             lineChart.apply {
                 if (!emptyDataHandle(it.isEmpty())) {
