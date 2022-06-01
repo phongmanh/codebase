@@ -7,41 +7,36 @@ import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import butterknife.ButterKnife
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.manhnguyen.codebase.R
-import com.manhnguyen.codebase.data.model.MovieInfo
-import com.manhnguyen.codebase.data.model.NowPlaying
-import com.manhnguyen.codebase.data.model.Result
-import com.manhnguyen.codebase.databinding.ActivityMovieBinding
+import com.manhnguyen.codebase.data.model.News
+import com.manhnguyen.codebase.databinding.ActivityNewsBinding
 import com.manhnguyen.codebase.system.networking.NetworkViewModel
 import com.manhnguyen.codebase.ui.ToolbarHelper
 import com.manhnguyen.codebase.ui.adapters.SimpleRecycleViewPagingAdapter
 import com.manhnguyen.codebase.ui.adapters.SimpleRecyclerAdapter
-import com.manhnguyen.codebase.ui.adapters.SimpleRecyclerPagingItem
-import com.manhnguyen.codebase.ui.adapters.movies.AdvertisementItem
-import com.manhnguyen.codebase.ui.adapters.movies.MovieItem
-import com.manhnguyen.codebase.ui.adapters.movies.MoviePagingItem
+import com.manhnguyen.codebase.ui.adapters.news.NewsItem
 import com.manhnguyen.codebase.ui.base.ActivityBase
 import com.manhnguyen.codebase.ui.progressbar.ProgressDialog
 import com.manhnguyen.codebase.ui.progressbar.ProgressHelper
-import com.manhnguyen.codebase.ui.viewmodels.MovieViewModel
-import kotlinx.android.synthetic.main.activity_movie.*
+import com.manhnguyen.codebase.ui.viewmodels.NewsViewModel
+import kotlinx.android.synthetic.main.activity_news.*
 import kotlinx.android.synthetic.main.toolbar_layout.view.*
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 
-class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
+class NewsActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
 
 
     override fun getAppCompatActivity(): AppCompatActivity {
@@ -68,8 +63,8 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
         return binding
     }
 
-    private lateinit var binding: ActivityMovieBinding
-    private val movieViewModel: MovieViewModel by inject()
+    private lateinit var binding: ActivityNewsBinding
+    private val newsViewModel: NewsViewModel by inject()
     private val networkViewModel: NetworkViewModel by inject()
 
     private var navItemSelected: Int = -1
@@ -78,7 +73,7 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMovieBinding.inflate(layoutInflater)
+        binding = ActivityNewsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ButterKnife.bind(this)
@@ -87,13 +82,13 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
             ActivityLifecycle(this)
         )
 
-        initializeToolbar(resources.getString(R.string.movie_toolbar_title), false)
+        initializeToolbar(resources.getString(R.string.new_toolbar_title), false)
         navigationAction()
         initializePullDownToRefresh()
 
-        networkViewModel.getInternetState().observe(this, { networkState ->
-            handleNetwork(networkState)
-        })
+        networkViewModel.getInternetState().observe(this) { networkState ->
+            //handleNetwork(networkState)
+        }
     }
 
     /**
@@ -130,24 +125,18 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
      * @param moviesInfo
      */
 
-    private fun makeMovieAdapter(moviesInfo: List<MovieInfo>) {
+    private fun makeMovieAdapter(news: List<News>) {
         rv_movie?.apply {
             adapter = SimpleRecyclerAdapter().apply {
                 var index = 0
-                moviesInfo.forEach { movieInfo ->
-                    movieInfo.imagePosterUrl =
-                        movieViewModel.api.imagePosterBaseUrl + "/${movieInfo.poster_path}"
-                    if ((index + 1) % 4 == 0) {
-                        setItem(AdvertisementItem(this), index)
-                    } else {
-                        setItem(MovieItem(movieInfo, this), index)
-                    }
+                news.forEach { data ->
+                    setItem(NewsItem(data, this), index)
                     index++
                 }
             }
             setHasFixedSize(true)
             setItemViewCacheSize(20)
-            layoutManager = LinearLayoutManager(this@MovieActivity)
+            layoutManager = LinearLayoutManager(this@NewsActivity)
         }
     }
 
@@ -157,69 +146,32 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
         rv_movie.apply {
             setHasFixedSize(true)
             setItemViewCacheSize(20)
-            layoutManager = LinearLayoutManager(this@MovieActivity)
+            layoutManager = LinearLayoutManager(this@NewsActivity)
             adapter = pagingAdapter
         }
-        showHideErrorContainer(false)
-        movieViewModel.nowPlaying(pagingAdapter)
-            .collectLatest {
-                pagingAdapter.submitData(it)
-            }
-
-        pagingAdapter.addLoadStateListener { loadState ->
-            if (loadState.source.refresh is LoadState.NotLoading) {
-                println("Empty")
+        pagingAdapter.addLoadStateListener { loadStates ->
+            when (loadStates.refresh) {
+                is LoadState.Loading -> {
+                    showProgressBar()
+                    showHideErrorContainer(false)
+                }
+                is LoadState.Error -> {
+                    if (pagingAdapter.itemCount <= 0)
+                        showHideErrorContainer(true)
+                    hideProgressBar()
+                }
+                !is LoadState.Loading -> {
+                    showHideErrorContainer(false)
+                    hideProgressBar()
+                }
             }
         }
-
-    }
-
-    private fun mappingItem(nowPlaying: List<MovieInfo>): PagingData<SimpleRecyclerPagingItem> {
-        val itemList = ArrayList<MoviePagingItem>()
-        nowPlaying.forEach { movieInfo ->
-            itemList.add(MoviePagingItem(movieInfo, pagingAdapter))
+        repeatOnLifecycle(Lifecycle.State.STARTED) {
+            newsViewModel.loadNews(pagingAdapter)
+                .collect {
+                    pagingAdapter.submitData(it)
+                }
         }
-        return PagingData.from(itemList)
-    }
-
-    /**
-     * get Now Playing data from server
-     */
-    private fun loadingNowPlayingData() {
-        movieViewModel.getNowPlaying(1).observe(this, {
-            when (it) {
-                is Result.Loading -> showProgressBar()
-                is Result.Success -> {
-                    showHideErrorContainer(false)
-                    makeMovieAdapter(it.data.results)
-                    hideProgressBar()
-                }
-                is Result.Error -> {
-                    showHideErrorContainer(true)
-                    hideProgressBar()
-                }
-            }
-        })
-    }
-
-    /**
-     * get Top Rated movies data from server
-     */
-    private fun loadingTopRatedData() {
-        movieViewModel.getTopRated(1).observe(this, {
-            when (it) {
-                is Result.Loading -> showProgressBar()
-                is Result.Success -> {
-                    showHideErrorContainer(false)
-                    //makeMovieAdapter(it.data.results)
-                    hideProgressBar()
-                }
-                is Result.Error -> {
-                    showHideErrorContainer(true)
-                    hideProgressBar()
-                }
-            }
-        })
     }
 
     /**
@@ -231,15 +183,14 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
                 BottomNavigationView.OnNavigationItemSelectedListener { item ->
                     if (navItemSelected == item.itemId) return@OnNavigationItemSelectedListener true
                     when (item.itemId) {
-                        R.id.now_playing_item -> lifecycleScope.launch { loadingDataPaging() }
-                        R.id.top_rate_item -> loadingTopRatedData()
+                        R.id.home_item -> lifecycleScope.launch { loadingDataPaging() }
                     }
                     navItemSelected = item.itemId
                     return@OnNavigationItemSelectedListener true
                 }
 
             binding.movieNavigation.setOnNavigationItemSelectedListener(listener)
-            binding.movieNavigation.selectedItemId = R.id.now_playing_item
+            binding.movieNavigation.selectedItemId = R.id.home_item
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -248,7 +199,7 @@ class MovieActivity : ActivityBase(), ProgressHelper, ToolbarHelper {
     }
 
     companion object {
-        fun newIntent(context: Context) = Intent(context, MovieActivity::class.java)
+        fun newIntent(context: Context) = Intent(context, NewsActivity::class.java)
     }
 
 

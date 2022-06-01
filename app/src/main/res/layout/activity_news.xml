@@ -44,7 +44,7 @@
                     android:id="@+id/rv_movie"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_10sdp"
+                    android:padding="@dimen/_5sdp"
                     android:visibility="@{(!showError? View.VISIBLE : View.GONE)}" />
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

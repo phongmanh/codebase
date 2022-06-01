@@ -1,20 +1,19 @@
-package com.manhnguyen.codebase.ui.adapters.movies
+package com.manhnguyen.codebase.ui.adapters.news
 
 import androidx.databinding.ViewDataBinding
 import com.manhnguyen.codebase.BR
 import com.manhnguyen.codebase.R
-import com.manhnguyen.codebase.data.model.MovieInfo
+import com.manhnguyen.codebase.data.model.News
 import com.manhnguyen.codebase.ui.adapters.BindableRecycleViewAdapter
 import com.manhnguyen.codebase.ui.adapters.BindableViewHolder
-import com.manhnguyen.codebase.ui.adapters.SimpleRecyclerAdapter
 import com.manhnguyen.codebase.ui.adapters.SimpleRecyclerItem
-import com.manhnguyen.codebase.ui.movie.MovieDetailsActivity
+import com.manhnguyen.codebase.ui.movie.NewsDetailsActivity
 
-class MovieItem(val movieInfo: MovieInfo, override var adapter: BindableRecycleViewAdapter) :
+class NewsItem(val news: News, override var adapter: BindableRecycleViewAdapter) :
     SimpleRecyclerItem() {
 
     override fun getLayout(): Int {
-        return R.layout.movie_item_layout
+        return R.layout.news_item_layout
     }
 
     override fun getViewHolderProvider(): (binding: ViewDataBinding) -> BindableViewHolder = {
@@ -24,10 +23,10 @@ class MovieItem(val movieInfo: MovieInfo, override var adapter: BindableRecycleV
     inner class MovieHolder(private val binding: ViewDataBinding) : BindableViewHolder(binding) {
         override fun bind(item: Any) {
             when (item) {
-                is MovieItem -> {
-                    binding.setVariable(BR.movieInfo, item.movieInfo)
+                is NewsItem -> {
+                    binding.setVariable(BR.newsDetail, item.news)
                     itemView.setOnClickListener {
-                        it.context.startActivity(MovieDetailsActivity.newIntent(it.context, item.movieInfo.movieId))
+                        /*it.context.startActivity(NewsDetailsActivity.newIntent(it.context, item.news.newsId))*/
                     }
                 }
             }
