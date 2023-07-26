@@ -1,8 +1,7 @@
-package co.kr.gogox.driver.util.adapters
+package com.giaphat.component.adapters
 
 import android.annotation.SuppressLint
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.LifecycleOwner
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DiffUtil
 

@@ -1,4 +1,4 @@
-package co.kr.gogox.driver.util.adapters
+package com.giaphat.component.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
